@@ -54,7 +54,7 @@ class ImageAnalyzer(val audioSensor: AudioSensor, private val context: Context):
             thread {
                 FileManager.saveImage("noDistort",mat.toBitmap())
                 Log.d(LOG_NAME, "save image")
-                val dstMat = distortImage(mat, 15)
+                val dstMat = distortImage(mat, level)
                 Log.d(LOG_NAME, "created dstImage")
                 FileManager.saveImage(
                     "level${level}",

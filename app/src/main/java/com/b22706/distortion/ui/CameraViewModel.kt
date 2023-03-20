@@ -27,8 +27,8 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
     val audioSensor: AudioSensor = AudioSensor(activity)
     val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(audioSensor, activity)
 
-    var width: Int = 1920
-    var height: Int = 1444
+//    var width: Int = 1920
+//    var height: Int = 1920
 
     fun startAudio() {
         audioSensor.start(10, AudioSensor.RECORDING_DB)
@@ -37,11 +37,11 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
         val context: Context = activity
 
-        fragment.view?.post {
-            width = fragment.requireView().width/2
-            height = fragment.requireView().height/2
-            Log.d(LOG_NAME,"w=$width, h=$height")
-        }
+//        fragment.view?.post {
+//            width = fragment.requireView().width
+//            height = fragment.requireView().height
+//            Log.d(LOG_NAME,"w=$width, h=$height")
+//        }
 
         cameraProviderFuture.addListener({
             try {
@@ -52,7 +52,7 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
                 val imageAnalysis = ImageAnalysis.Builder()
                     // RGBA出力が必要な場合は、以下の行を有効にしてください
                     // .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                    .setTargetResolution(Size(width, height))
+//                    .setTargetResolution(Size(width, height))
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
 

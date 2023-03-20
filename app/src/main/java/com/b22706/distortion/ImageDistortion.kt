@@ -22,11 +22,15 @@ class ImageDistortion {
             mapX.create(size, CvType.CV_32FC1)
             mapY.create(size, CvType.CV_32FC1)
 
+            val sinScale = Math.PI * 2 / (image.cols() + image.rows()) * 30
+            val scaleX = Math.PI * 2 / image.cols() * 15
+            val scaleY = Math.PI * 2 / image.rows() * 15
+
             for (i in 0 until image.rows()) {
-                mapX.put(i, 0, FloatArray(image.cols()) { j -> (j + strength * sin(i/10.0)).toFloat() })
+                mapX.put(i, 0, FloatArray(image.cols()) { j -> (j + strength * sin(i*sinScale)).toFloat() })
             }
             for (i in 0 until image.rows()) {
-                mapY.put(i, 0, FloatArray(image.cols()) { j -> (i + strength * sin(j/10.0)).toFloat() })
+                mapY.put(i, 0, FloatArray(image.cols()) { j -> (i + strength * sin(j*sinScale)).toFloat() })
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
@@ -37,7 +41,7 @@ class ImageDistortion {
         // 音量によって画像の歪ませ度を計算
         fun getDistortionLevel(volume: Int) :Int {
             return if (volume <= ImageAnalyzer.volumeThreshold) { 0 }
-            else { ((volume- ImageAnalyzer.volumeThreshold)/2)+5 }
+            else { ((volume- ImageAnalyzer.volumeThreshold)/2)+1 }
         }
 
     }

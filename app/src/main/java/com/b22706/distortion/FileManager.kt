@@ -14,7 +14,7 @@ class FileManager {
         fun saveImage(imageName: String, image: Bitmap) {
             Log.d(LOG_NAME,"save Image")
             Log.d(LOG_NAME,imageName)
-            val appName = "distortion"
+            val appName = "ぐにゃぁ"
             val pictureDir = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 appName
