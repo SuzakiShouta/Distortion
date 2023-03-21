@@ -25,7 +25,7 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
         const val LOG_NAME: String = "CameraViewModel"
     }
     val audioSensor: AudioSensor = AudioSensor(activity)
-    val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(audioSensor, activity)
+    val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(audioSensor)
 
     fun startAudio() {
         audioSensor.start(10, AudioSensor.RECORDING_DB)
