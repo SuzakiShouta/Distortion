@@ -1,7 +1,11 @@
-package com.b22706.distortion
+package com.b22706.distortion.imageUtil
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.os.Build
 import android.view.Surface
+import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.camera.core.ImageProxy
 import org.opencv.android.Utils
 import org.opencv.core.Core
@@ -16,9 +20,11 @@ class ImageFormatter {
         const val LOG_NAME = "ImageFormatter"
 
         // なんか知らないけど画像が回転するからその補正
-        fun fixMatRotation(matOrg: Mat): Mat {
+        @RequiresApi(Build.VERSION_CODES.R)
+        fun fixMatRotation(matOrg: Mat, context: Context): Mat {
             val mat: Mat
-            when (Surface.ROTATION_0) {
+            val display = context.display
+            when (display?.rotation) {
                 Surface.ROTATION_0 -> {
                     mat = Mat(matOrg.cols(), matOrg.rows(), matOrg.type())
                     Core.transpose(matOrg, mat)

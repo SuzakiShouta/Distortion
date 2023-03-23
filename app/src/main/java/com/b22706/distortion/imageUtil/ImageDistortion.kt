@@ -1,6 +1,7 @@
-package com.b22706.distortion
+package com.b22706.distortion.imageUtil
 
 import android.util.Log
+import com.b22706.distortion.ImageAnalyzer
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import kotlin.math.sin

@@ -2,8 +2,10 @@ package com.b22706.distortion.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.util.Log
 import android.util.Size
+import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModel
 import com.b22706.distortion.AudioSensor
 import com.b22706.distortion.ImageAnalyzer
 import com.b22706.distortion.MainActivity
+import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -25,19 +28,21 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
         const val LOG_NAME: String = "CameraViewModel"
     }
     val audioSensor: AudioSensor = AudioSensor(activity)
-    val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(audioSensor)
+    val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(audioSensor, activity)
 
     fun startAudio() {
         audioSensor.start(10, AudioSensor.RECORDING_DB)
     }
-    fun startCamera(fragment: Fragment) {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
+
+    fun startCamera(fragment: Fragment, backCamera: Boolean) {
+        val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> = ProcessCameraProvider.getInstance(activity)
         val context: Context = activity
 
         cameraProviderFuture.addListener({
             try {
                 val cameraProvider = cameraProviderFuture.get()
                 val preview = Preview.Builder().build()
+                cameraProvider.unbindAll()
 
                 // 各フレームを解析できるAnalysis
                 val imageAnalysis = ImageAnalysis.Builder()
@@ -51,11 +56,18 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
                 // distortionに画像を送りなさい．
                 imageAnalysis.setAnalyzer(cameraExecutor, imageAnalyzer)
 
-                // 今回使用するカメラは背面
-                val cameraSelector =
-                    CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                // 背面カメラを使用する場合
+                val cameraSelector = if (backCamera) {
+                    CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                         .build()
-                cameraProvider.unbindAll()
+                }
+                // フロントカメラを使用する場合
+                else {
+                    CameraSelector.Builder()
+                        .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                        .build()
+                }
 
                 // これらの設定を使ってLifecycle化
                 val camera = cameraProvider.bindToLifecycle(

@@ -39,13 +39,18 @@ class CameraFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         cameraViewModel.startAudio()
-        cameraViewModel.startCamera(this)
+        cameraViewModel.startCamera(this, true)
 
         cameraViewModel.imageAnalyzer.image.observe(viewLifecycleOwner){
             activity.runOnUiThread {
                 binding.imageView.setImageBitmap(it)
             }
         }
+
+        binding.buttonCamera.setOnClickListener {
+            cameraViewModel.startCamera(this, false)
+        }
+
     }
 
     override fun onResume() {
