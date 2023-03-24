@@ -13,8 +13,9 @@ import com.b22706.distortion.imageUtil.ImageDistortion.Companion.getDistortionLe
 import com.b22706.distortion.imageUtil.ImageFormatter.Companion.fixMatRotation
 import com.b22706.distortion.imageUtil.ImageFormatter.Companion.toBitmap
 import com.b22706.distortion.imageUtil.ImageFormatter.Companion.toMat
+import com.b22706.distortion.ui.CameraViewModel
 
-class ImageAnalyzer(val audioSensor: AudioSensor, val context: Context): ImageAnalysis.Analyzer {
+class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context): ImageAnalysis.Analyzer {
 
     companion object {
         const val LOG_NAME: String = "ImageAnalyzer"
@@ -26,12 +27,14 @@ class ImageAnalyzer(val audioSensor: AudioSensor, val context: Context): ImageAn
         MutableLiveData<Bitmap>(Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888))
     val image: LiveData<Bitmap> = _image
 
+    private val audioSensor: AudioSensor = cameraViewModel.audioSensor
+
     // ここに毎フレーム画像が渡される
     @RequiresApi(Build.VERSION_CODES.R)
     override fun analyze(image: ImageProxy) {
         image.use {
             val mat = image.toMat()
-            var rMat = fixMatRotation(mat, context)
+            var rMat = fixMatRotation(mat ,context ,cameraViewModel.useBackCamera)
             // 音量によって画像処理，音が一定以下なら何もしない．
             val level = getDistortionLevel(audioSensor.getVolume())
             if (level > 0) rMat = distortImage(rMat, level)

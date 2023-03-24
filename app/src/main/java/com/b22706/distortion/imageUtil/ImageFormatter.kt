@@ -2,6 +2,7 @@ package com.b22706.distortion.imageUtil
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Camera
 import android.os.Build
 import android.view.Surface
 import android.view.WindowManager
@@ -21,10 +22,11 @@ class ImageFormatter {
 
         // なんか知らないけど画像が回転するからその補正
         @RequiresApi(Build.VERSION_CODES.R)
-        fun fixMatRotation(matOrg: Mat, context: Context): Mat {
+        fun fixMatRotation(matOrg: Mat, context: Context, useBackCamera: Boolean): Mat {
             val mat: Mat
             val display = context.display
-            when (display?.rotation) {
+            val rotation = display?.rotation
+            when (rotation) {
                 Surface.ROTATION_0 -> {
                     mat = Mat(matOrg.cols(), matOrg.rows(), matOrg.type())
                     Core.transpose(matOrg, mat)
@@ -41,6 +43,11 @@ class ImageFormatter {
                     Core.flip(mat, mat, 1)
                 }
             }
+
+            if (!useBackCamera) {
+                Core.flip(mat, mat, 0)
+            }
+
             return mat
         }
         fun ImageProxy.toMat(): Mat {

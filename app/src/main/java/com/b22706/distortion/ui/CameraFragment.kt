@@ -48,7 +48,7 @@ class CameraFragment : Fragment() {
         }
 
         binding.buttonCamera.setOnClickListener {
-            cameraViewModel.startCamera(this, false)
+            cameraViewModel.startCamera(this, !cameraViewModel.useBackCamera)
         }
 
     }
@@ -60,6 +60,6 @@ class CameraFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        cameraViewModel.imageAnalyzer.audioSensor.stop()
+        cameraViewModel.audioSensor.stop()
     }
 }

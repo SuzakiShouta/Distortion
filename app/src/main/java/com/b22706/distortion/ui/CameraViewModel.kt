@@ -28,7 +28,8 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
         const val LOG_NAME: String = "CameraViewModel"
     }
     val audioSensor: AudioSensor = AudioSensor(activity)
-    val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(audioSensor, activity)
+    val imageAnalyzer: ImageAnalyzer = ImageAnalyzer(this, activity)
+    var useBackCamera: Boolean = true
 
     fun startAudio() {
         audioSensor.start(10, AudioSensor.RECORDING_DB)
@@ -37,6 +38,7 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
     fun startCamera(fragment: Fragment, backCamera: Boolean) {
         val cameraProviderFuture: ListenableFuture<ProcessCameraProvider> = ProcessCameraProvider.getInstance(activity)
         val context: Context = activity
+        useBackCamera = backCamera
 
         cameraProviderFuture.addListener({
             try {
