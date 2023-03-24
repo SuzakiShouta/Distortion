@@ -47,7 +47,7 @@ class CameraFragment : Fragment() {
             }
         }
 
-        binding.buttonCamera.setOnClickListener {
+        binding.imageButtonCameraChange.setOnClickListener {
             cameraViewModel.startCamera(this, !cameraViewModel.useBackCamera)
         }
 
