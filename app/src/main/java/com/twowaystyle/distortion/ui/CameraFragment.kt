@@ -1,14 +1,13 @@
-package com.b22706.distortion.ui
+package com.twowaystyle.distortion.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.b22706.distortion.MainActivity
-import com.b22706.distortion.databinding.FragmentCameraBinding
+import com.twowaystyle.distortion.MainActivity
+import com.twowaystyle.distortion.databinding.FragmentCameraBinding
 
 
 class CameraFragment : Fragment() {

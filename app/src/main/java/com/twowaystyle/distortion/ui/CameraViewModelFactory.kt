@@ -1,8 +1,8 @@
-package com.b22706.distortion.ui
+package com.twowaystyle.distortion.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.b22706.distortion.MainActivity
+import com.twowaystyle.distortion.MainActivity
 
 class CameraViewModelFactory(private val activity: MainActivity): ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

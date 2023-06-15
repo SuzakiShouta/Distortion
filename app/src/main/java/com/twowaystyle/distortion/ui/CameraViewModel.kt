@@ -1,11 +1,8 @@
-package com.b22706.distortion.ui
+package com.twowaystyle.distortion.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import android.util.Size
-import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -14,10 +11,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
-import com.b22706.distortion.AudioSensor
-import com.b22706.distortion.ImageAnalyzer
-import com.b22706.distortion.MainActivity
 import com.google.common.util.concurrent.ListenableFuture
+import com.twowaystyle.distortion.AudioSensor
+import com.twowaystyle.distortion.ImageAnalyzer
+import com.twowaystyle.distortion.MainActivity
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

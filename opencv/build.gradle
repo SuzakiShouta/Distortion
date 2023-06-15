@@ -97,11 +97,12 @@ def openCVersionCode = ((4 * 100 + 7) * 100 + 0) * 10 + 0
 println "OpenCV: " +openCVersionName + " " + project.buildscript.sourceFile
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
+    namespace 'com.twowaystyle.distortion'
 
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 33
+        targetSdkVersion 34
 
 
         externalNativeBuild {
@@ -134,6 +135,7 @@ android {
             aidl.srcDirs = ['java/src']
             res.srcDirs = ['java/res']
             manifest.srcFile 'java/AndroidManifest.xml'
+            jniLibs.srcDirs += 'src/main/libs'
         }
     }
 
@@ -141,6 +143,9 @@ android {
         cmake {
             path (project.projectDir.toString() + '/libcxx_helper/CMakeLists.txt')
         }
+    }
+    buildFeatures {
+        aidl true
     }
 }
 

@@ -1,11 +1,9 @@
-package com.b22706.distortion.imageUtil
+package com.twowaystyle.distortion.imageUtil
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Camera
 import android.os.Build
 import android.view.Surface
-import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.camera.core.ImageProxy
 import org.opencv.android.Utils

@@ -1,4 +1,4 @@
-package com.b22706.distortion
+package com.twowaystyle.distortion
 
 import android.Manifest
 import android.content.Context
@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.MutableLiveData
 import org.jtransforms.fft.DoubleFFT_1D
 import java.util.stream.IntStream
 import kotlin.math.log10
