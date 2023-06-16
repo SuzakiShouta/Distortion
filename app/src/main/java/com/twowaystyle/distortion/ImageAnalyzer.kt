@@ -8,7 +8,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.twowaystyle.distortion.imageUtil.ImageDistortion.Companion.distortImage
+import com.twowaystyle.distortion.imageUtil.ImageDistortion.Companion.distortImageCircle
 import com.twowaystyle.distortion.imageUtil.ImageDistortion.Companion.getDistortionLevel
 import com.twowaystyle.distortion.imageUtil.ImageFormatter.Companion.fixMatRotation
 import com.twowaystyle.distortion.imageUtil.ImageFormatter.Companion.toBitmap
@@ -28,6 +28,7 @@ class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context):
     val image: LiveData<Bitmap> = _image
 
     private val audioSensor: AudioSensor = cameraViewModel.audioSensor
+    var t = 0
 
     // ここに毎フレーム画像が渡される
     @RequiresApi(Build.VERSION_CODES.R)
@@ -37,7 +38,10 @@ class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context):
             var rMat = fixMatRotation(mat ,context ,cameraViewModel.useBackCamera)
             // 音量によって画像処理，音が一定以下なら何もしない．
             val level = getDistortionLevel(audioSensor.getVolume())
-            if (level > 0) rMat = distortImage(rMat, level)
+            if (level > 0) {
+                rMat = distortImageCircle(rMat, level, t)
+                t+=1
+            }
             val bitmap = rMat.toBitmap()
             _image.postValue(bitmap)
         }
