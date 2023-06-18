@@ -22,8 +22,8 @@ class ImageDistortion {
         const val LOG_NAME = "ImageDistortion"
 
         // 画像を歪ませる 歪ませ度はstrength 1~255まで入るが10前後がいい感じ
-        fun distortImage(image: Mat, strength: Int): Mat {
-            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
+        fun distortImage(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
+            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
             val result = Mat()
             val mapX = Mat()
             val mapY = Mat()
@@ -31,15 +31,14 @@ class ImageDistortion {
 
             mapX.create(size, CvType.CV_32FC1)
             mapY.create(size, CvType.CV_32FC1)
-            val sinScale = Math.PI * 2 / (image.cols() + image.rows()) * 30
+            val sinScale = Math.PI * 2 / (image.cols() + image.rows()) * 10 * pitch
             val strengthScale = strength * ((image.cols() + image.rows()) / 2000.0) + 1
-            Log.d(LOG_NAME, "$strengthScale , $strength")
 
             for (i in 0 until image.rows()) {
-                mapX.put(i, 0, FloatArray(image.cols()) { j -> (j + strengthScale * sin(i*sinScale)).toFloat() })
+                mapX.put(i, 0, FloatArray(image.cols()) { j -> (j + strengthScale * sin((i*sinScale) + t )).toFloat() })
             }
             for (i in 0 until image.rows()) {
-                mapY.put(i, 0, FloatArray(image.cols()) { j -> (i + strengthScale * sin(j*sinScale)).toFloat() })
+                mapY.put(i, 0, FloatArray(image.cols()) { j -> (i + strengthScale * sin((j*sinScale) + t )).toFloat() })
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
@@ -50,26 +49,27 @@ class ImageDistortion {
         // 音量によって画像の歪ませ度を計算
         fun getDistortionLevel(volume: Int) :Int {
             return if (volume <= ImageAnalyzer.volumeThreshold) { 0 }
-            else { ((volume- ImageAnalyzer.volumeThreshold)/2)+4 }
+            else { ((volume- ImageAnalyzer.volumeThreshold) * 2 ) +1 }
         }
 
-        fun distortImageCircle(image: Mat, strength: Int, t: Int): Mat {
+        fun distortImageCircle(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
+            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
             val result = Mat()
             val mapX = Mat.zeros(image.size(), CvType.CV_32FC1)
             val mapY = Mat.zeros(image.size(), CvType.CV_32FC1)
             val centerX = image.cols() / 2
             val centerY = image.rows() / 2
-            val maxRadius = Math.max(centerX, centerY).toDouble()
+            val maxRadius = centerX.coerceAtLeast(centerY).toDouble()
             val sinScale = Math.PI * 2 / maxRadius * 10
 
             for (y in 0 until image.rows()) {
                 mapX.put(y, 0, FloatArray(image.cols()) { x ->
                     val offsetX = (x - centerX).toDouble()
                     val offsetY = (y - centerY).toDouble()
-                    val angleRad = Math.atan2(offsetY, offsetX)
-                    val r = Math.sqrt(offsetX * offsetX + offsetY * offsetY)
-                    val distortion = strength * Math.sin(r * sinScale)
-                    (x + distortion * Math.cos(angleRad)).toFloat()
+                    val angleRad = atan2(offsetY, offsetX)
+                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)
+                    val distortion = strength * sin((r * sinScale * pitch /5.0 ) - t )
+                    (x + distortion * cos(angleRad + t)).toFloat()
                 })
             }
 
@@ -77,19 +77,20 @@ class ImageDistortion {
                 mapY.put(y, 0, FloatArray(image.cols()) { x ->
                     val offsetX = (x - centerX).toDouble()
                     val offsetY = (y - centerY).toDouble()
-                    val angleRad = Math.atan2(offsetY, offsetX)
-                    val r = Math.sqrt(offsetX * offsetX + offsetY * offsetY)
-                    val distortion = strength * Math.sin(r * sinScale)
-                    (y + distortion * Math.sin(angleRad)).toFloat()
+                    val angleRad = atan2(offsetY, offsetX)
+                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)
+                    val distortion = strength * sin((r * sinScale * pitch /5.0 ) - t )
+                    (y + distortion * sin(angleRad + t)).toFloat()
                 })
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
+            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
             return result
         }
 
 
-        fun distortImageFlutter(image: Mat, strength: Int, t: Int): Mat {
+        fun distortImageFlutter(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
             Log.d(ImageAnalyzer.LOG_NAME, "start distort")
             val result = Mat()
             val mapX = Mat.zeros(image.size(), CvType.CV_32FC1)

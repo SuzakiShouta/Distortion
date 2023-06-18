@@ -29,7 +29,7 @@ class CameraViewModel(@field:SuppressLint("StaticFieldLeak") val activity: MainA
     var useBackCamera: Boolean = true
 
     fun startAudio() {
-        audioSensor.start(10, AudioSensor.RECORDING_DB)
+        audioSensor.start(10)
     }
 
     fun startCamera(fragment: Fragment, backCamera: Boolean) {

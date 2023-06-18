@@ -28,7 +28,7 @@ class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context):
     val image: LiveData<Bitmap> = _image
 
     private val audioSensor: AudioSensor = cameraViewModel.audioSensor
-    var t = 0
+    var t: Double = 0.0
 
     // ここに毎フレーム画像が渡される
     @RequiresApi(Build.VERSION_CODES.R)
@@ -37,10 +37,11 @@ class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context):
             val mat = image.toMat()
             var rMat = fixMatRotation(mat ,context ,cameraViewModel.useBackCamera)
             // 音量によって画像処理，音が一定以下なら何もしない．
-            val level = getDistortionLevel(audioSensor.getVolume())
+            val level = getDistortionLevel(audioSensor.volume)
             if (level > 0) {
-                rMat = distortImageCircle(rMat, level, t)
-                t+=1
+                rMat = distortImageCircle(rMat, level, audioSensor.pitch+1, t)
+                t+=0.1
+                if (t > 360.0) { t = 0.0 }
             }
             val bitmap = rMat.toBitmap()
             _image.postValue(bitmap)
