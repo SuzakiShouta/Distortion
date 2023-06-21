@@ -31,7 +31,7 @@ class ImageDistortion {
 
             mapX.create(size, CvType.CV_32FC1)
             mapY.create(size, CvType.CV_32FC1)
-            val sinScale = Math.PI * 2 / (image.cols() + image.rows()) * 10 * pitch
+            val sinScale = Math.PI * 2.0 / (image.cols() + image.rows()) * 10.0 * pitch
             val strengthScale = strength * ((image.cols() + image.rows()) / 2000.0) + 1
 
             for (i in 0 until image.rows()) {
@@ -89,6 +89,32 @@ class ImageDistortion {
             return result
         }
 
+        fun distortImageUp(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
+            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
+            val result = Mat()
+            val mapX = Mat()
+            val mapY = Mat()
+            val size = Size(image.cols().toDouble(), image.rows().toDouble())
+
+            mapX.create(size, CvType.CV_32FC1)
+            mapY.create(size, CvType.CV_32FC1)
+            val sinScale = Math.PI * 2.0 / (image.cols() + image.rows()) * 10.0
+            val strengthScale = strength * ((image.cols() + image.rows()) / 2000.0)
+
+            for (y in 0 until image.rows()) {
+                mapX.put(y, 0, FloatArray(image.cols()) { x -> (x + sin(x * sinScale)).toFloat() })
+            }
+            for (y in 0 until image.rows()) {
+                mapY.put(y, 0, FloatArray(image.cols()) { x ->
+                    (y + strengthScale * sin(x * sinScale) * sin((y * sinScale * pitch + -t))).toFloat()
+                })
+            }
+
+            Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
+            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+            return result
+        }
+
 
         fun distortImageFlutter(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
             Log.d(ImageAnalyzer.LOG_NAME, "start distort")
@@ -117,6 +143,46 @@ class ImageDistortion {
                     val r = sqrt(offsetX.pow(2) + offsetY.pow(2))
                     val distortion = 30.0 * cos(r/maxRadius)
                     y + (distortion * sin(angleRad+t)).toFloat()
+                })
+            }
+
+            Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
+            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+            return result
+        }
+
+        fun distortImageWaveCircle(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
+            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
+            val pitch = 1
+            val result = Mat()
+            val mapX = Mat.zeros(image.size(), CvType.CV_32FC1)
+            val mapY = Mat.zeros(image.size(), CvType.CV_32FC1)
+            val centerX = image.cols() / 2
+            val centerY = image.rows() / 2
+            val maxRadius = centerX.coerceAtLeast(centerY).toDouble()
+            val sinScale = Math.PI * 2 / maxRadius * 10
+
+            for (y in 0 until image.rows()) {
+                mapX.put(y, 0, FloatArray(image.cols()) { x ->
+                    val offsetX = (x - centerX).toDouble()
+                    val offsetY = (y - centerY).toDouble()
+                    val angleRad = atan2(offsetY, offsetX)
+                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)
+                    val waveR = r + ((cos (angleRad * 16.0) * 10) * r / 100.0)
+                    val distortion = strength * sin((waveR * sinScale * pitch - t)) /2
+                    (x + distortion * cos(angleRad)).toFloat()
+                })
+            }
+
+            for (y in 0 until image.rows()) {
+                mapY.put(y, 0, FloatArray(image.cols()) { x ->
+                    val offsetX = (x - centerX).toDouble()
+                    val offsetY = (y - centerY).toDouble()
+                    val angleRad = atan2(offsetY, offsetX)
+                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)
+                    val waveR = r + ((sin (angleRad * 16.0) * 10) * r / 100.0)
+                    val distortion = strength * sin((waveR * sinScale * pitch - t))/2
+                    (y + distortion * sin(angleRad)).toFloat()
                 })
             }
 

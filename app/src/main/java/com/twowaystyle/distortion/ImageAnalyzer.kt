@@ -8,7 +8,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.twowaystyle.distortion.imageUtil.ImageDistortion.Companion.distortImageCircle
+import com.twowaystyle.distortion.imageUtil.ImageDistortion.Companion.distortImageWaveCircle
 import com.twowaystyle.distortion.imageUtil.ImageDistortion.Companion.getDistortionLevel
 import com.twowaystyle.distortion.imageUtil.ImageFormatter.Companion.fixMatRotation
 import com.twowaystyle.distortion.imageUtil.ImageFormatter.Companion.toBitmap
@@ -39,7 +39,7 @@ class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context):
             // 音量によって画像処理，音が一定以下なら何もしない．
             val level = getDistortionLevel(audioSensor.volume)
             if (level > 0) {
-                rMat = distortImageCircle(rMat, level, audioSensor.pitch+1, t)
+                rMat = distortImageWaveCircle(rMat, level, audioSensor.pitch+1, t)
                 t+=0.1
                 if (t > 360.0) { t = 0.0 }
             }
