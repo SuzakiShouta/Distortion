@@ -1,6 +1,5 @@
 package com.twowaystyle.distortion.imageUtil
 
-import android.util.Log
 import com.twowaystyle.distortion.ImageAnalyzer
 import org.opencv.core.Core
 import org.opencv.core.CvType
@@ -23,7 +22,7 @@ class ImageDistortion {
 
         // 画像を歪ませる 歪ませ度はstrength 1~255まで入るが10前後がいい感じ
         fun distortImage(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
-            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
+//            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
             val result = Mat()
             val mapX = Mat()
             val mapY = Mat()
@@ -42,7 +41,7 @@ class ImageDistortion {
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
-            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
             return result
         }
 
@@ -53,7 +52,7 @@ class ImageDistortion {
         }
 
         fun distortImageCircle(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
-            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
             val result = Mat()
             val mapX = Mat.zeros(image.size(), CvType.CV_32FC1)
             val mapY = Mat.zeros(image.size(), CvType.CV_32FC1)
@@ -85,12 +84,12 @@ class ImageDistortion {
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
-            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
             return result
         }
 
         fun distortImageUp(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
-            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
+//            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
             val result = Mat()
             val mapX = Mat()
             val mapY = Mat()
@@ -111,13 +110,13 @@ class ImageDistortion {
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
-            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
             return result
         }
 
 
         fun distortImageFlutter(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
-            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
             val result = Mat()
             val mapX = Mat.zeros(image.size(), CvType.CV_32FC1)
             val mapY = Mat.zeros(image.size(), CvType.CV_32FC1)
@@ -147,13 +146,12 @@ class ImageDistortion {
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
-            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
             return result
         }
 
         fun distortImageWaveCircle(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
-            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
-            val pitch = 1
+//            Log.d(ImageAnalyzer.LOG_NAME, "start distort")
             val result = Mat()
             val mapX = Mat.zeros(image.size(), CvType.CV_32FC1)
             val mapY = Mat.zeros(image.size(), CvType.CV_32FC1)
@@ -187,7 +185,7 @@ class ImageDistortion {
             }
 
             Imgproc.remap(image, result, mapX, mapY, Imgproc.INTER_LINEAR, Core.BORDER_CONSTANT, Scalar.all(0.0))
-            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
+//            Log.d(ImageAnalyzer.LOG_NAME, "end distort")
             return result
         }
 

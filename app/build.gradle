@@ -67,5 +67,6 @@ dependencies {
     implementation("androidx.camera:camera-mlkit-vision:${camerax_version}")
     implementation("androidx.camera:camera-extensions:${camerax_version}")
 
-    implementation 'com.github.kmasan:AudioSensor:1.0'
+    implementation 'org.apache.commons:commons-csv:1.8'
+    implementation 'com.github.kmasan:AudioSensor:1.2'
 }

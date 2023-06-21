@@ -3,6 +3,7 @@ package com.twowaystyle.distortion
 import android.content.Context
 import android.graphics.*
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -39,6 +40,7 @@ class ImageAnalyzer(val cameraViewModel: CameraViewModel, val context: Context):
             // 音量によって画像処理，音が一定以下なら何もしない．
             val level = getDistortionLevel(audioSensor.volume)
             if (level > 0) {
+                Log.d(LOG_NAME, "vowel = ${audioSensor.vowel}")
                 rMat = distortImageWaveCircle(rMat, level, audioSensor.pitch+1, t)
                 t+=0.1
                 if (t > 360.0) { t = 0.0 }
