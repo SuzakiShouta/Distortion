@@ -88,8 +88,9 @@ class ImageDistortion {
             return result
         }
 
-        fun distortImageUp(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
+        fun distortImageWave(image: Mat, strength: Int, pitch: Int, t: Double): Mat {
 //            Log.d(ImageAnalyzer.LOG_NAME, "start distort, $strength ")
+            val t = t * 2
             val result = Mat()
             val mapX = Mat()
             val mapY = Mat()
@@ -165,9 +166,9 @@ class ImageDistortion {
                     val offsetX = (x - centerX).toDouble()
                     val offsetY = (y - centerY).toDouble()
                     val angleRad = atan2(offsetY, offsetX)
-                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)
-                    val waveR = r + ((cos (angleRad * 16.0) * 10) * r / 100.0)
-                    val distortion = strength * sin((waveR * sinScale * pitch - t)) /2
+                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)/5
+                    val waveR = r + ((cos (angleRad * 16.0) * 5) * r / 100.0)
+                    val distortion = strength * sin((waveR * sinScale * pitch - t))/2
                     (x + distortion * cos(angleRad)).toFloat()
                 })
             }
@@ -177,7 +178,7 @@ class ImageDistortion {
                     val offsetX = (x - centerX).toDouble()
                     val offsetY = (y - centerY).toDouble()
                     val angleRad = atan2(offsetY, offsetX)
-                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)
+                    val r = sqrt(offsetX * offsetX + offsetY * offsetY)/5
                     val waveR = r + ((sin (angleRad * 16.0) * 10) * r / 100.0)
                     val distortion = strength * sin((waveR * sinScale * pitch - t))/2
                     (y + distortion * sin(angleRad)).toFloat()

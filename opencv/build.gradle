@@ -97,12 +97,12 @@ def openCVersionCode = ((4 * 100 + 7) * 100 + 0) * 10 + 0
 println "OpenCV: " +openCVersionName + " " + project.buildscript.sourceFile
 
 android {
-    compileSdkVersion 34
-    namespace 'com.twowaystyle.distortion'
+    compileSdkVersion 33
+    namespace 'com.twowaystyle.distortion.opencv'
 
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 34
+        targetSdkVersion 33
 
 
         externalNativeBuild {
@@ -145,6 +145,7 @@ android {
         }
     }
     buildFeatures {
+        buildConfig true
         aidl true
     }
 }

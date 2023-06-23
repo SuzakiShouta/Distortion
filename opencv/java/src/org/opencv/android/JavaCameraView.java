@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 
-import com.twowaystyle.distortion.BuildConfig;
+import com.twowaystyle.distortion.opencv.BuildConfig;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;

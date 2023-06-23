@@ -13,8 +13,8 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.twowaystyle.distortion.BuildConfig;
-import com.twowaystyle.distortion.R;
+import com.twowaystyle.distortion.opencv.BuildConfig;
+import com.twowaystyle.distortion.opencv.R;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;

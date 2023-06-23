@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
-import com.twowaystyle.distortion.R;
+import com.twowaystyle.distortion.opencv.R;
 
 public class CameraGLSurfaceView extends GLSurfaceView {
 
